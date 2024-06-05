@@ -68,11 +68,11 @@ class LinkedList {
     node.next = null;
   }
 
-  contains(value) {
+  contains(predicate) {
     var node = this.head;
 
     while (node !== null) {
-      if (node.value === value) {
+      if (predicate(node)) {
         return true;
       }
       node = node.next;
@@ -130,10 +130,13 @@ class Node {
   }
 }
 
+module.exports = LinkedList;
+
 var list = new LinkedList();
 list.prepend(1);
 list.prepend(2);
 list.append(3);
 list.append(4);
+list.append({john: "john johnson"});
 
 console.log(util.inspect(list, { depth: null }));
