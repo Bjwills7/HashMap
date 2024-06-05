@@ -35,9 +35,9 @@ class HashMap {
         } else if (this.isList(bucket)) { // Handle linked lists
             if (bucket.contains(isKey)) { // Catch duplicate 
                 var duplicateKey = bucket.find(isKey);
-                console.log(duplicateKey);
                 
                 this.map[hashCode].replace(currentPair, duplicateKey);
+                
             } else {
 
                 this.map[hashCode].append(currentPair);
@@ -87,14 +87,12 @@ class HashMap {
 }
 
 var myMap = new HashMap();
-console.log(myMap.map);
 myMap.set("kenny", "kenny powers");
 myMap.set("kevin", "kevin malone");
 myMap.set("charles", "charles jeffords");
 myMap.set("jeff", "jeff johnson");
-console.log(myMap.map);
 myMap.set("charles", "charles jeffery");
 myMap.set("362", "Collision!");
 myMap.set("kenny", "Collision!");
 console.log(util.inspect(myMap.map, { depth: null }));
-console.log(myMap.findCollision('kenny'));
+// console.log(myMap.findCollision('kenny'));
