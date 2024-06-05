@@ -1,4 +1,4 @@
-const LinkedList = require('./linkedList');
+const { Node, LinkedList } = require('./linkedList');
 const util = require("util"); // used for debugging;
 
 class HashMap {
@@ -19,37 +19,23 @@ class HashMap {
         return hashCode;
     }
 
-    isList = (bucket) => {  
-        if (!bucket) return false;
-        const keys = Object.keys(bucket);
-
-        const test = bucket instanceof LinkedList;
-        console.log("bucket instance of LinkedList?", test);
-        return test;
-
-        // for (let key in keys) {
-        //     console.log(key);
-        //     if (key === 'head') return true;
-        // }
-        // return false;
-    }
+    isList = (bucket) =>  bucket instanceof LinkedList;
     
     set(key, value) {
         const hashCode = this.hash(key);
         var bucket = this.map[hashCode];
         var currentPair = {[key]: value};
 
-        const isKey = (node) => Object.keys(node)[0] === key ? true : false; // Predicate callback function for linkedlist methods to find duplicates
-
+        const isKey = (node) => Object.keys(node.value)[0] === key ? true : false; // Predicate callback function for linkedlist methods to find duplicates
 
         if (bucket === undefined || (Object.keys(bucket)[0] === key && key !== 'head')) { // Handle empty bucket and duplicates
 
                 this.map[hashCode] = currentPair;
 
         } else if (this.isList(bucket)) { // Handle linked lists
-            console.log("isList");
             if (bucket.contains(isKey)) { // Catch duplicate 
                 var duplicateKey = bucket.find(isKey);
+                console.log(duplicateKey);
                 
                 this.map[hashCode].replace(currentPair, duplicateKey);
             } else {
