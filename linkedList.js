@@ -126,16 +126,18 @@ class LinkedList {
 
   replace(value, index) {
     if (index === 0) {
-      const list = this.at(index).next;
-      list.prepend(value);
-      this.head = list;
+      const list = this.head.next;
+
+      this.head = new Node(value);
+      this.head.next = list;
+      
+    } else {
+      var before = this.at(index - 1);
+      var after = before.next.next;
+  
+      before.next = new Node(value);
+      before.next.next = after;
     }
-
-    var before = this.at(index - 1);
-    var after = before.next.next;
-
-    before.next = new Node(value);
-    before.next.next = after;
   }
 }
 
@@ -146,7 +148,7 @@ class Node {
   }
 }
 
-module.exports = LinkedList;
+module.exports = { Node, LinkedList};
 if (require.main === module) {
   var list = new LinkedList();
   
