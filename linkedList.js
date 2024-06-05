@@ -125,7 +125,11 @@ class LinkedList {
   }
 
   replace(value, index) {
-    
+    var before = this.at(index - 1);
+    var after = before.next.next;
+
+    before.next = new Node(value);
+    before.next.next = after;
   }
 }
 
