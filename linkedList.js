@@ -125,6 +125,12 @@ class LinkedList {
   }
 
   replace(value, index) {
+    if (index === 0) {
+      const list = this.at(index).next;
+      list.prepend(value);
+      this.head = list;
+    }
+
     var before = this.at(index - 1);
     var after = before.next.next;
 
@@ -141,12 +147,14 @@ class Node {
 }
 
 module.exports = LinkedList;
-
-var list = new LinkedList();
-list.prepend(1);
-list.prepend(2);
-list.append(3);
-list.append(4);
-list.append({john: "john johnson"});
-
-console.log(util.inspect(list, { depth: null }));
+if (require.main === module) {
+  var list = new LinkedList();
+  
+  list.prepend(1);
+  list.prepend(2);
+  list.append(3);
+  list.append(4);
+  list.append({john: "john johnson"});
+  
+  console.log(util.inspect(list, { depth: null }));
+}
