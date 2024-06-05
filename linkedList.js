@@ -80,12 +80,12 @@ class LinkedList {
     return false;
   }
 
-  find(value) {
+  find(predicate) {
     var node = this.head;
     var index = 0;
 
     while (node !== null) {
-      if (node.value === value) {
+      if (predicate(node)) {
         return index;
       }
       index++;
@@ -113,6 +113,7 @@ class LinkedList {
 
     node.next = current;
     before.next = node;
+    this.#size++;
   }
 
   removeAt(index) {
@@ -120,6 +121,11 @@ class LinkedList {
     var after = before.next.next;
 
     before.next = after;
+    this.#size--;
+  }
+
+  replace(value, index) {
+    
   }
 }
 
