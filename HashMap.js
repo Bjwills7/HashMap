@@ -2,13 +2,26 @@ const { Node, LinkedList } = require('./linkedList');
 const util = require("util"); // used for debugging;
 
 class HashMap {
-    #buckets = 97;
-    #length = 0;
     
     constructor() {
         this.map = [];
     }
     
+    #buckets = 97;
+    #length = 0;
+
+    #loopAll(listCB, objCB) { // Utility for getKeys and getValues
+        var arr = [];
+        
+        for (let bucket of this.map) {
+            if (!bucket) continue;
+            else if (this.isList(bucket)) arr = listCB(arr, bucket);
+            else objCB(arr, bucket);
+        }
+
+        return arr;
+    }
+
     get length() {
         return this.#length;
     } 
@@ -156,24 +169,17 @@ class HashMap {
     }
 
     getKeys() {
-        var arr = [];
-        
-        for (let bucket of this.map) {
-            if (!bucket) {
-                
-                continue;
-                
-            } else if (this.isList(bucket)){
+       return this.#loopAll(
+        (arr, bucket) => arr.concat(bucket.getKeys()),
+        (arr, bucket) => arr.push(Object.keys(bucket)[0])
+       )
+    }
 
-                arr = arr.concat(bucket.getKeys());
-                
-            } else {
-                
-                arr.push(Object.keys(bucket)[0]);
-
-            }
-        }
-        return arr;
+    getValues() {
+      return this.#loopAll(
+        (arr, bucket) => arr.concat(bucket.getValues()),
+        (arr, bucket) => arr.push(Object.keys(bucket)[0])
+      )
     }
 
     findCollision(key) { // Used for debugging
@@ -198,4 +204,5 @@ myMap.set("362", "Collision!");
 myMap.set("kenny", "Collision!");
 console.log(util.inspect(myMap.map, { depth: null }));
 console.log(myMap.getKeys());
+console.log(myMap.getValues());
 // console.log(myMap.findCollision('kenny'));
