@@ -3,10 +3,15 @@ const util = require("util"); // used for debugging;
 
 class HashMap {
     #buckets = 97;
- 
+    #length = 0;
+    
     constructor() {
         this.map = [];
     }
+    
+    get length() {
+        return this.#length;
+    } 
 
     hash(key) {
         var hashCode = 0;
@@ -28,9 +33,14 @@ class HashMap {
 
         const isKey = (node) => Object.keys(node.value)[0] === key ? true : false; // Predicate callback function for linkedlist methods to find duplicates
 
-        if (bucket === undefined || (Object.keys(bucket)[0] === key && key !== 'head')) { // Handle empty bucket and duplicates
+        if (bucket === undefined) { // Handle empty bucket
 
-                this.map[hashCode] = currentPair;
+            this.map[hashCode] = currentPair;
+            this.#length += 1;
+
+        } else if (Object.keys(bucket)[0] === key && !this.isList(bucket)) { // Handle duplicates
+
+            this.map[hashCode] = currentPair
 
         } else if (this.isList(bucket)) { // Handle linked lists
             if (bucket.contains(isKey)) { // Catch duplicate 
@@ -41,6 +51,8 @@ class HashMap {
             } else {
 
                 this.map[hashCode].append(currentPair);
+                this.#length += 1;
+
             }
 
         } else { // Create linked list
@@ -50,6 +62,8 @@ class HashMap {
             if (Object.keys(oldPair)[0] !== key) { // Catch duplicate
 
                 this.map[hashCode].append(oldPair);
+                this.#length += 1;
+
             }
             this.map[hashCode].append(currentPair);
 
@@ -116,6 +130,7 @@ class HashMap {
             if (index !== null) {
 
                 this.map[hashCode].removeAt(index);
+                this.#length -= 1;
                 return true;
 
             } else {
@@ -126,11 +141,39 @@ class HashMap {
         } else if (this.map[hashCode][key]) {
 
             delete this.map[hashCode];
+            this.#length -= 1;
             return true;
             
         }
 
         return false;
+    }
+
+    clear() {
+
+        this.map.length = 0;
+
+    }
+
+    getKeys() {
+        var arr = [];
+        
+        for (let bucket of this.map) {
+            if (!bucket) {
+                
+                continue;
+                
+            } else if (this.isList(bucket)){
+
+                arr = arr.concat(bucket.getKeys());
+                
+            } else {
+                
+                arr.push(Object.keys(bucket)[0]);
+
+            }
+        }
+        return arr;
     }
 
     findCollision(key) { // Used for debugging
@@ -153,7 +196,6 @@ myMap.set("jeff", "jeff johnson");
 myMap.set("charles", "charles jeffery");
 myMap.set("362", "Collision!");
 myMap.set("kenny", "Collision!");
-myMap.remove("362");
-console.log(myMap.remove("362"));
 console.log(util.inspect(myMap.map, { depth: null }));
+console.log(myMap.getKeys());
 // console.log(myMap.findCollision('kenny'));
