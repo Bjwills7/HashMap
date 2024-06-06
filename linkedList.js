@@ -140,14 +140,15 @@ class LinkedList {
     }
   }
 
-  keys() {
+  getKeys() {
     const arr = [];
     var list = this.head;
     
     while (list !== null) {
       arr.push(Object.keys(list.value)[0]);
+      list = list.next;
     }
-
+    
     return arr;
   }
 }
@@ -159,7 +160,7 @@ class Node {
   }
 }
 
-module.exports = { Node, LinkedList};
+module.exports = { Node, LinkedList };
 if (require.main === module) {
   var list = new LinkedList();
   
