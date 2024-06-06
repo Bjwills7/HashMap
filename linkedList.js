@@ -8,12 +8,12 @@ class LinkedList {
   }
   #size;
   
-  #loopAll(getThis) { // Utility for getKeys and getValues
+  #loopAll(cb) { // Utility for getKeys and getValues
     const arr = [];
     var list = this.head;
     
     while (list !== null) {
-      getThis(arr, list);
+      cb(arr, list);
       list = list.next;
     }
     
@@ -157,7 +157,7 @@ class LinkedList {
   }
 
   getValues() {
-    return this.#loopAll((arr, node) => arr.push(node.value[0]));
+    return this.#loopAll((arr, node) => arr.push(node.value[Object.keys(node.value)[0]]));
   }
 }
 
