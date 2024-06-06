@@ -139,6 +139,17 @@ class LinkedList {
       before.next.next = after;
     }
   }
+
+  keys() {
+    const arr = [];
+    var list = this.head;
+    
+    while (list !== null) {
+      arr.push(Object.keys(list.value)[0]);
+    }
+
+    return arr;
+  }
 }
 
 class Node {
