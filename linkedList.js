@@ -1,11 +1,23 @@
 const util = require("util"); // only used to log the entire list in node for testing purposes
 
 class LinkedList {
-  #size;
-
+  
   constructor() {
     this.head = null;
     this.#size = 0;
+  }
+  #size;
+  
+  #loopAll(getThis) { // Utility for getKeys and getValues
+    const arr = [];
+    var list = this.head;
+    
+    while (list !== null) {
+      getThis(arr, list);
+      list = list.next;
+    }
+    
+    return arr;
   }
 
   append(value) {
@@ -141,15 +153,11 @@ class LinkedList {
   }
 
   getKeys() {
-    const arr = [];
-    var list = this.head;
-    
-    while (list !== null) {
-      arr.push(Object.keys(list.value)[0]);
-      list = list.next;
-    }
-    
-    return arr;
+    return this.#loopAll((arr, node) => arr.push(Object.keys(node.value)[0]));
+  }
+
+  getValues() {
+    return this.#loopAll((arr, node) => arr.push(node.value[0]));
   }
 }
 
