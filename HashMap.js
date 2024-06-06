@@ -178,8 +178,15 @@ class HashMap {
     getValues() {
       return this.#loopAll(
         (arr, bucket) => arr.concat(bucket.getValues()),
-        (arr, bucket) => arr.push(Object.keys(bucket)[0])
+        (arr, bucket) => arr.push(bucket[Object.keys(bucket)[0]])
       )
+    }
+
+    getEntries() {
+        return this.#loopAll(
+            (arr, bucket) => arr.concat(bucket.getEntries()),
+            (arr, bucket) => arr.push(Object.entries(bucket)[0])
+        )
     }
 
     findCollision(key) { // Used for debugging
@@ -202,7 +209,6 @@ myMap.set("jeff", "jeff johnson");
 myMap.set("charles", "charles jeffery");
 myMap.set("362", "Collision!");
 myMap.set("kenny", "Collision!");
-console.log(util.inspect(myMap.map, { depth: null }));
-console.log(myMap.getKeys());
-console.log(myMap.getValues());
+// console.log(util.inspect(myMap.map, { depth: null }));
+console.log(myMap.getEntries());
 // console.log(myMap.findCollision('kenny'));
