@@ -159,6 +159,10 @@ class LinkedList {
   getValues() {
     return this.#loopAll((arr, node) => arr.push(node.value[Object.keys(node.value)[0]]));
   }
+
+  getEntries() {
+    return this.#loopAll((arr, node) => arr.push(Object.entries(node.value)));
+  }
 }
 
 class Node {
