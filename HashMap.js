@@ -37,7 +37,7 @@ class HashMap {
                 var duplicateKey = bucket.find(isKey);
                 
                 this.map[hashCode].replace(currentPair, duplicateKey);
-                
+
             } else {
 
                 this.map[hashCode].append(currentPair);
@@ -61,17 +61,76 @@ class HashMap {
         const bucket = this.map[hashCode];
 
         if (bucket === undefined) {
+
             return null;
+
         } else if (this.isList(bucket)) {
             var index = bucket.find((node) => key === Object.keys(node)[0]);
+
             if (index !== null) {
+
                return bucket.at(index)[key];
+
             } else {
+
                 return null;
+
             }
         } else {
+
             return bucket[key];
+
         }
+    }
+
+    has(key) {
+        const hashCode = this.hash(key);
+
+        if (this.map[hashCode] === undefined) {
+
+            return false;
+
+        } else if (this.isList(this.map[hashCode])) {
+
+            return this.map[hashCode].contains((node) => Object.keys(node.value)[0] === key);
+
+        } else if (Object.keys(this.map[hashCode])[0] === key) {
+
+            return true;
+
+        }
+
+        return false;
+    }
+
+    remove(key) {
+        const hashCode = this.hash(key);
+
+        if (this.map[hashCode] === undefined) {
+
+            return false;
+
+        } else if (this.isList(this.map[hashCode])) {
+            var index = this.map[hashCode].find((node) => Object.keys(node.value)[0] === key);
+
+            if (index !== null) {
+
+                this.map[hashCode].removeAt(index);
+                return true;
+
+            } else {
+
+                return false;
+
+            }
+        } else if (this.map[hashCode][key]) {
+
+            delete this.map[hashCode];
+            return true;
+            
+        }
+
+        return false;
     }
 
     findCollision(key) { // Used for debugging
@@ -94,5 +153,7 @@ myMap.set("jeff", "jeff johnson");
 myMap.set("charles", "charles jeffery");
 myMap.set("362", "Collision!");
 myMap.set("kenny", "Collision!");
+myMap.remove("362");
+console.log(myMap.remove("362"));
 console.log(util.inspect(myMap.map, { depth: null }));
 // console.log(myMap.findCollision('kenny'));
