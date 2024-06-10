@@ -22,9 +22,39 @@ class HashMap {
         return arr;
     }
 
+    #expandSet() {
+
+        if (this.checkLoad()) {
+            const entries = this.getEntries();
+    
+            this.#buckets = this.#buckets * 2 - 1;
+            this.clear();
+            this.#length = 0;
+
+            for (let i = 0; i < entries.length; i++) {
+                this.set(entries[i][0], entries[i][1]);
+            }
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+   }
+
+    checkLoad() {
+        return Math.floor((this.#length / this.#buckets) * 100) / 100 >= .75;
+       }
+
     get length() {
         return this.#length;
     } 
+
+    get buckets() {
+        return this.#buckets;
+    }
 
     hash(key) {
         var hashCode = 0;
@@ -40,6 +70,8 @@ class HashMap {
     isList = (bucket) =>  bucket instanceof LinkedList;
     
     set(key, value) {
+        if (this.checkLoad()) this.#expandSet();
+
         const hashCode = this.hash(key);
         var bucket = this.map[hashCode];
         var currentPair = {[key]: value};
@@ -68,17 +100,22 @@ class HashMap {
 
             }
 
-        } else { // Create linked list
+        } else {
             var oldPair = this.map[hashCode];
 
-            this.map[hashCode] = new LinkedList();
-            if (Object.keys(oldPair)[0] !== key) { // Catch duplicate
+            if (Object.keys(oldPair)[0] !== key) { // Create linked list
 
+                this.map[hashCode] = new LinkedList();
                 this.map[hashCode].append(oldPair);
+                this.map[hashCode].append(currentPair);
                 this.#length += 1;
 
+            } else { // Update duplicate
+
+                this.map[hashCode] = currentPair;
+
             }
-            this.map[hashCode].append(currentPair);
+
 
         }
     }
@@ -201,6 +238,12 @@ class HashMap {
     }
 }
 
+function addEntries(map) { // Used for testing hashmap growth
+    for (let i = 0; i < 210; i++) {
+        map.set(("kenny" + i), ("kenny powers" + i))
+    }
+}
+
 var myMap = new HashMap();
 myMap.set("kenny", "kenny powers");
 myMap.set("kevin", "kevin malone");
@@ -209,6 +252,12 @@ myMap.set("jeff", "jeff johnson");
 myMap.set("charles", "charles jeffery");
 myMap.set("362", "Collision!");
 myMap.set("kenny", "Collision!");
-// console.log(util.inspect(myMap.map, { depth: null }));
-console.log(myMap.getEntries());
+// addEntries(myMap);
+console.log(util.inspect(myMap.map, { depth: null }));
+// console.log('length', myMap.length);
+// console.log('getKeys.length', myMap.getKeys().length);
+// console.log('buckets', myMap.buckets);
+// console.log('actual array length', myMap.map.length);
+// console.log(myMap.has("kenny200"));
+// console.log(myMap.getEntries());
 // console.log(myMap.findCollision('kenny'));
