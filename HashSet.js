@@ -5,33 +5,33 @@ class HashSet {
     
     constructor() {
         this.set = [];
-        }
-        
-        #buckets = 97;
-        #length = 0;
-        #isList = (bucket) => bucket instanceof LinkedList;
-        
-        #loopAll(valueCB, listCB) {
-            var arr = [];
-        
-            for (let bucket of this.set) {
-                if (!bucket) continue;
-                else if (this.#isList(bucket)) arr = listCB(arr, bucket);
-                else valueCB(arr, bucket);
-            }
-        
-            return arr;
-        }
-        
-        hash(key) {
-        var hashCode = 0;
-        const prime = 31;
+    }
+   
+   #buckets = 97;
+   #length = 0;
+   #isList = (bucket) => bucket instanceof LinkedList;
+   
+   #loopAll(valueCB, listCB) {
+       var arr = [];
+   
+       for (let bucket of this.set) {
+           if (!bucket) continue;
+           else if (this.#isList(bucket)) arr = listCB(arr, bucket);
+           else valueCB(arr, bucket);
+       }
+   
+       return arr;
+   }
+   
+   hash(key) {
+     var hashCode = 0;
+     const prime = 31;
 
-        for (let i = 0; i < key.length; i++) {
-            hashCode = (hashCode * prime + key.charCodeAt(i)) % this.#buckets;
-        }
+     for (let i = 0; i < key.length; i++) {
+         hashCode = (hashCode * prime + key.charCodeAt(i)) % this.#buckets;
+     }
 
-        return hashCode;
+     return hashCode;
     }
 
 
