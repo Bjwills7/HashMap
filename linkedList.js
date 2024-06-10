@@ -157,7 +157,10 @@ class LinkedList {
   }
 
   getValues() {
-    return this.#loopAll((arr, node) => arr.push(node.value[Object.keys(node.value)[0]]));
+    return this.#loopAll((arr, node) => {
+      if (node.value instanceof Object) arr.push(node.value[Object.keys(node.value)[0]])
+      else arr.push(node.value);
+    });
   }
 
   getEntries() {
