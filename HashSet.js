@@ -22,6 +22,32 @@ class HashSet {
    
        return arr;
    }
+
+   #expandSet() {
+
+        if (this.checkLoad) {
+            const keys = this.getKeys();
+
+            this.#buckets = this.#buckets * 2 - 1;
+            this.clear();
+            this.#length = 0;
+
+            for (let i = 0; i < keys.length; i++) {
+                this.add(keys[i]);
+            }
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+   }
+
+   checkLoad() {
+    return Math.floor((this.#length / this.#buckets) * 100) / 100 >= .75;
+   }
    
    hash(key) {
      var hashCode = 0;
@@ -36,6 +62,8 @@ class HashSet {
 
 
     add(key) {
+        if (this.checkLoad()) this.#expandSet(); // If over load factor double buckets and rehash data
+
         const hashCode = this.hash(key);
         var bucket = this.set[hashCode];
 
@@ -186,6 +214,10 @@ class HashSet {
             (arr, bucket) => arr.concat(bucket.getValues())
         )
     }
+
+    get length() {
+        return this.#length;
+       }
 }
 
 var mySet = new HashSet();
@@ -199,5 +231,5 @@ mySet.add("amy");
 mySet.add("rosa");
 mySet.add("harold");
 mySet.add("362");
-console.log(mySet.getKeys());
 console.log(util.inspect(mySet.set, { depth: null }));
+console.log(mySet.has("362"));
